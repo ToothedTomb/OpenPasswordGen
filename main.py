@@ -50,27 +50,70 @@ def Who_made_Me():
 
     labelTitle.pack(side="top",fill="x",pady=1)
     label.pack(side="top", fill="x", pady=2)
-
-
 def load_passwords_popup():
-    cursor.execute("SELECT password FROM passwords")
-    loaded_passwords = [row[0] for row in cursor.fetchall()]
+    def search_passwords(event=None):
+        search_query = search_var.get()
+        cursor.execute("SELECT password FROM passwords WHERE password LIKE ?", ('%' + search_query + '%',))
+        update_passwords_display(cursor.fetchall())
+
+    def update_passwords_display(passwords):
+        for widget in passwords_entries_frame.winfo_children():
+            widget.destroy()
+        for password in passwords:
+            frame = Frame(passwords_entries_frame)
+            frame.pack(side="top", fill="x", pady=5)
+
+            label = Label(frame, font=("Ubuntu", 14), text=password[0])
+            label.pack(side="left", padx=10)
+
+            copy_button = Button(frame, text="Copy", font=("Ubuntu", 12), bg="grey", activebackground='pink', command=lambda p=password[0]: pyperclip.copy(p))
+            copy_button.pack(side="right", padx=10)
 
     popup = Toplevel(root)
     popup.title("All Passwords in Database")
+    popup.geometry("700x400")
+    popup.resizable(0,0)
 
-    labelTitle = Label(popup, font=("Ubuntu", 18, "bold", "underline"), anchor='center', text="All Passwords:")
+
+    labelTitle = Label(popup, font=("Ubuntu", 18, "bold", "underline"), text="All Passwords:")
     labelTitle.pack(side="top", fill="x", pady=10)
 
-    for password in loaded_passwords:
-        frame = Frame(popup)
-        frame.pack(side="top", fill="x", pady=5)
+    search_var = StringVar()
+    search_entry = Entry(popup, textvariable=search_var, font=("Ubuntu", 14))
+    search_entry.pack(side="top", fill="x", padx=10, pady=10)
+    search_entry.bind('<KeyRelease>', search_passwords)
 
-        label = Label(frame, font=("Ubuntu", 14), anchor='center', text=password)
-        label.pack(side="left", padx=10)
+    # Main frame for passwords and scrollbar
+    main_frame = Frame(popup)
+    main_frame.pack(side=TOP, fill=BOTH, expand=True)
+    
 
-        copy_button = Button(frame, text="Copy", font=("Ubuntu", 12), bg="grey", activebackground='pink', command=lambda p=password: pyperclip.copy(p))
-        copy_button.pack(side="right", padx=10)
+    # Canvas to attach the scrollbars
+    canvas = Canvas(main_frame)
+    canvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+    # Scrollbar on the right side, filling the y-axis
+    scrollbar = Scrollbar(main_frame, command=canvas.yview)
+    scrollbar.pack(side=RIGHT, fill=Y)
+    canvas.config(yscrollcommand=scrollbar.set)
+
+    # Horizontal scrollbar spanning the bottom of the popup
+    scrollbar2 = Scrollbar(popup, orient='horizontal', command=canvas.xview)
+    scrollbar2.pack(side=BOTTOM, fill=X)
+    canvas.config(xscrollcommand=scrollbar2.set)
+
+    # Frame inside the canvas for password entries
+    passwords_entries_frame = Frame(canvas)
+    canvas.create_window((0, 0), window=passwords_entries_frame, anchor='nw')
+
+    # Update canvas scrollregion when the size of the frame changes
+    passwords_entries_frame.bind("<Configure>", lambda e: canvas.config(scrollregion=canvas.bbox("all")))
+
+    # Initial display of passwords
+    cursor.execute("SELECT password FROM passwords")
+    update_passwords_display(cursor.fetchall())
+
+
 def save_database_password():
     password_save = passwrd.get().splitlines()
     for password in password_save:
