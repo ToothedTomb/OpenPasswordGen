@@ -1,8 +1,7 @@
-# OpenPasswordGen
-Free and open source password generator for Linux.
-![Icon](https://github.com/ToothedTomb/OpenPasswordGen/assets/52569279/fc3fa012-a201-4ec8-949d-290d9d3cdd15)
-View password that you saved and then delete them.
-![Screenshot from 2024-02-01 20-48-21](https://github.com/ToothedTomb/OpenPasswordGen/assets/52569279/b28a9aa8-8661-49b9-bffe-8939c3c591a9)
+# Open Password Generator:
+Free and open source.
 
-The password generator main program.
-![Screenshot from 2024-02-01 20-49-25](https://github.com/ToothedTomb/OpenPasswordGen/assets/52569279/ab3f7673-39b5-4770-bd7d-33e7032ae435)
+Russian and Enlgish support.
+
+![Screenshot From 2024-11-05 01-18-46](https://github.com/user-attachments/assets/fd362cd4-85d0-4625-b69e-73c3925bca2d)
+![Screenshot From 2024-11-05 13-13-57](https://github.com/user-attachments/assets/bc81efba-7c7f-4e8c-ab51-9f9b5ed86da9)
