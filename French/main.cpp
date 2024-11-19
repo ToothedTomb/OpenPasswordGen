@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
     gtk_entry_set_placeholder_text(GTK_ENTRY(entry_length), "Exemple - 12");
     gtk_box_pack_start(GTK_BOX(vbox), entry_length, FALSE, FALSE, 5);
     // This button allows you to generate your password when you entered the number of strings. 
-    GtkWidget *generate_button = gtk_button_new_with_label("Generate Password");
+    GtkWidget *generate_button = gtk_button_new_with_label("Générer un mot de passe");
     g_signal_connect(generate_button, "clicked", G_CALLBACK(on_generate_password), nullptr);
     gtk_box_pack_start(GTK_BOX(vbox), generate_button, FALSE, FALSE, 10);
     //This is where you will see the generated password...
